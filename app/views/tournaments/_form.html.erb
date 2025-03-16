@@ -1,0 +1,25 @@
+<div class="container my-5">
+  <%= form_with(model: @tournament, local: true, class: "form-group") do |form| %>
+
+    <div class="mb-3">
+      <%= form.label :name, class: "form-label" %>
+      <%= form.text_field :name, class: "form-control", placeholder: "Enter tournament name" %>
+      <% if @tournament.errors[:name].any? %>
+        <div class="text-danger"><%= @tournament.errors[:name].join(", ") %></div>
+      <% end %>
+    </div>
+
+    <div class="mb-3">
+      <%= form.label :description, class: "form-label" %>
+      <%= form.text_area :description, rows: 5, class: "form-control", placeholder: "Enter tournament description" %>
+      <% if @tournament.errors[:description].any? %>
+        <div class="text-danger"><%= @tournament.errors[:description].join(", ") %></div>
+      <% end %>
+    </div>
+
+    <div class="text-center">
+      <%= form.submit "Save Tournament", class: "btn btn-primary btn-lg" %>
+    </div>
+
+  <% end %>
+</div>

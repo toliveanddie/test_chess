@@ -1,0 +1,5 @@
+// Optionally show a success message
+alert('Engine moved to Round 2 successfully!');
+
+// Optionally update part of the page dynamically
+$("#round-one-participants").html("<%= j render partial: 'round_one_participants', locals: { participants: @tournament.participants } %>");

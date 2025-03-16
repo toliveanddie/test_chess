@@ -1,0 +1,87 @@
+<div class="container my-5">
+  <!-- Success or error notice -->
+  <% if notice %>
+    <div class="alert alert-success"><%= notice %></div>
+  <% end %>
+
+  <!-- Tournament header with edit, destroy, and back options -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0"><%= @tournament.name %></h1>
+    <div>
+      <%= link_to "Edit Tournament", edit_tournament_path(@tournament), class: "btn btn-warning btn-sm" %>
+      <%= form_with url: tournament_path(@tournament), method: :delete, local: true, class: "d-inline" do |form| %>
+        <%= form.submit "Destroy Tournament", class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to delete this tournament?" } %>
+      <% end %>
+      <%= link_to "Back to Tournaments", tournaments_path, class: "btn btn-secondary btn-sm" %>
+    </div>
+  </div>
+
+  <p class="lead"><%= @tournament.description %></p>
+
+  <!-- Round #1 Participants -->
+  <h2 class="mt-5">Round #1 Participants</h2>
+  <% @engine_groups.each_with_index do |group, index| %>
+    <div class="card my-3">
+      <div class="card-header bg-primary text-white">
+        Group <%= index + 1 %>
+      </div>
+      <ul class="list-group list-group-flush">
+        <% group.each do |engine| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= engine.name %>
+            <%= form_with url: round_two_participants_path, method: :post, local: true, class: "d-inline" do |form| %>
+              <%= form.hidden_field :engine_id, value: engine.id, name: "round_two_participant[engine_id]" %>
+              <%= form.hidden_field :tournament_id, value: @tournament.id, name: "round_two_participant[tournament_id]" %>
+              <%= form.submit "Move to Round 2", class: "btn btn-success btn-sm" %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Round #2 Participants -->
+  <h2 class="mt-5">Round #2 Participants</h2>
+  <% @round_two_groups.each_with_index do |group, index| %>
+    <div class="card my-3">
+      <div class="card-header bg-secondary text-white">
+        Group <%= index + 1 %>
+      </div>
+      <ul class="list-group list-group-flush">
+        <% group.each do |engine| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= engine.name %>
+            <%= form_with url: round_three_participants_path, method: :post, local: true, class: "d-inline" do |form| %>
+              <%= form.hidden_field :engine_id, value: engine.id, name: "round_three_participant[engine_id]" %>
+              <%= form.hidden_field :tournament_id, value: @tournament.id, name: "round_three_participant[tournament_id]" %>
+              <%= form.submit "Move to Round 3", class: "btn btn-success btn-sm" %>
+            <% end %>
+            <%= form_with url: round_two_participant_path(@tournament.round_two_participants.find_by(engine_id: engine.id)), method: :delete, local: true, class: "d-inline" do |form| %>
+              <%= form.submit "Remove from Round 2", class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to remove this engine from Round 2?" } %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Round #3 Participants -->
+  <h2 class="mt-5">Round #3 Participants</h2>
+  <% @round_three_groups.each_with_index do |group, index| %>
+    <div class="card my-3">
+      <div class="card-header bg-dark text-white">
+        Group <%= index + 1 %>
+      </div>
+      <ul class="list-group list-group-flush">
+        <% group.each do |engine| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <%= engine.name %>
+            <%= form_with url: round_three_participant_path(@tournament.round_three_participants.find_by(engine_id: engine.id)), method: :delete, local: true, class: "d-inline" do |form| %>
+              <%= form.submit "Remove from Round 3", class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to remove this engine from Round 3?" } %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>
