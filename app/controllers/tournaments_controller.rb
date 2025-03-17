@@ -31,12 +31,10 @@ class TournamentsController < ApplicationController
 		if @round_two_participant.save
 			respond_to do |format|
 				format.html { redirect_back fallback_location: tournament_path(@round_two_participant.tournament), notice: "Engine moved to Round 2 successfully!" }
-				format.js # This will render a `create.js.erb` file
 			end
 		else
 			respond_to do |format|
 				format.html { redirect_back fallback_location: tournament_path(@round_two_participant.tournament), alert: "Failed to move engine to Round 2." }
-				format.js { render js: "alert('Failed to move engine to Round 2.');" }
 			end
 		end
 	end
