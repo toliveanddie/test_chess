@@ -11,9 +11,7 @@ class TournamentsController < ApplicationController
 		@engine_groups = @tournament.participants.includes(:engine).map(&:engine).each_slice(9).to_a
 		@round_two_groups = @tournament.round_two_participants.includes(:engine).map(&:engine).each_slice(10).to_a
 		@round_three_groups = @tournament.round_three_participants.includes(:engine).map(&:engine).each_slice(9).to_a
-
-
-  end
+	end
 
   # GET /tournaments/new
   def new
@@ -26,16 +24,17 @@ class TournamentsController < ApplicationController
 
   # POST /tournaments or /tournaments.json
   def create
-		@round_two_participant = RoundTwoParticipant.new(round_two_participant_params)
+		@tournament = Tournament.new(tournament_params)
+		
+		if @tournament.save
+			# Randomize and associate engines with the tournament
+			Engine.all.shuffle.each do |engine|
+				@tournament.participants.create!(engine: engine)
+			end
 	
-		if @round_two_participant.save
-			respond_to do |format|
-				format.html { redirect_back fallback_location: tournament_path(@round_two_participant.tournament), notice: "Engine moved to Round 2 successfully!" }
-			end
+			redirect_to @tournament, notice: "Tournament was successfully created and engines have been randomized."
 		else
-			respond_to do |format|
-				format.html { redirect_back fallback_location: tournament_path(@round_two_participant.tournament), alert: "Failed to move engine to Round 2." }
-			end
+			render :new, status: :unprocessable_entity
 		end
 	end
 	
@@ -71,6 +70,6 @@ class TournamentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def tournament_params
-      params.expect(tournament: [ :name, :description ])
+      params.require(:tournament).permit(:name, :description)
     end
 end
