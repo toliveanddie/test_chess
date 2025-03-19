@@ -35,7 +35,7 @@
                 <%= form_with url: round_two_participants_path, method: :post, local: true, class: "d-inline" do |form| %>
                   <%= form.hidden_field :engine_id, value: engine.id, name: "round_two_participant[engine_id]" %>
                   <%= form.hidden_field :tournament_id, value: @tournament.id, name: "round_two_participant[tournament_id]" %>
-                  <%= form.submit "Move to Round 2", class: "btn btn-success btn-sm" %>
+                  <%= form.submit "Move", class: "btn btn-success btn-sm" %>
                 <% end %>
               </li>
             <% end %>
@@ -59,10 +59,10 @@
                 <%= form_with url: round_three_participants_path, method: :post, local: true, class: "d-inline" do |form| %>
                   <%= form.hidden_field :engine_id, value: engine.id, name: "round_three_participant[engine_id]" %>
                   <%= form.hidden_field :tournament_id, value: @tournament.id, name: "round_three_participant[tournament_id]" %>
-                  <%= form.submit "Move to Round 3", class: "btn btn-success btn-sm" %>
+                  <%= form.submit "Move", class: "btn btn-success btn-sm" %>
                 <% end %>
                 <%= form_with url: round_two_participant_path(@tournament.round_two_participants.find_by(engine_id: engine.id)), method: :delete, local: true, class: "d-inline" do |form| %>
-                  <%= form.submit "Remove from Round 2", class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to remove this engine from Round 2?" } %>
+                  <%= form.submit "Remove", class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to remove this engine from Round 2?" } %>
                 <% end %>
               </li>
             <% end %>
@@ -84,7 +84,7 @@
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <%= engine.name %>
                 <%= form_with url: round_three_participant_path(@tournament.round_three_participants.find_by(engine_id: engine.id)), method: :delete, local: true, class: "d-inline" do |form| %>
-                  <%= form.submit "Remove from Round 3", class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to remove this engine from Round 3?" } %>
+                  <%= form.submit "Remove", class: "btn btn-danger btn-sm", data: { confirm: "Are you sure you want to remove this engine from Round 3?" } %>
                 <% end %>
               </li>
             <% end %>
