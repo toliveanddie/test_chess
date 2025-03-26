@@ -8,8 +8,8 @@ class TournamentsController < ApplicationController
 
   # GET /tournaments/1 or /tournaments/1.json
   def show
-		@engine_groups = @tournament.participants.includes(:engine).map(&:engine).each_slice(6).to_a
-		@round_two_groups = @tournament.round_two_participants.includes(:engine).map(&:engine).each_slice(10).to_a
+		@engine_groups = @tournament.participants.includes(:engine).map(&:engine).each_slice(10).to_a
+		@round_two_groups = @tournament.round_two_participants.includes(:engine).map(&:engine).each_slice(9).to_a
 		@round_three_groups = @tournament.round_three_participants.includes(:engine).map(&:engine).each_slice(9).to_a
 	end
 
