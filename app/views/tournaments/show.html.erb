@@ -32,7 +32,7 @@
             <% group.each do |engine| %>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <%= engine.name %>
-                <%= form_with url: round_two_participants_path, method: :post, local: true, class: "d-inline" do |form| %>
+                <%= form_with url: round_two_participants_path, method: :post, remote: true, class: "d-inline" do |form| %>
                   <%= form.hidden_field :engine_id, value: engine.id, name: "round_two_participant[engine_id]" %>
                   <%= form.hidden_field :tournament_id, value: @tournament.id, name: "round_two_participant[tournament_id]" %>
                   <%= form.submit "Move", class: "btn btn-success btn-sm" %>
@@ -94,3 +94,30 @@
     </div>
   </div>
 </div>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+		document.querySelectorAll("form.d-inline").forEach(form => {
+			form.addEventListener("submit", function(event) {
+				event.preventDefault();
+				const formData = new FormData(form);
+
+				fetch(form.action, {
+					method: form.method,
+					body: formData,
+					headers: {
+						'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+					}
+				})
+				.then(response => response.text())
+				.then(data => {
+					console.log("Form submitted successfully");
+					// Optional: update DOM or show message
+				})
+				.catch(error => {
+					console.error("Error:", error);
+				});
+			});
+		});
+	});
+</script>
