@@ -1,0 +1,20 @@
+<% engine_groups = tournament.participants.includes(:engine).map(&:engine).each_slice(10).to_a %>
+<% engine_groups.each_with_index do |group, index| %>
+  <div class="card my-3">
+    <div class="card-header bg-primary text-white">
+      Group <%= index + 1 %>
+    </div>
+    <ul class="list-group list-group-flush">
+      <% group.each do |engine| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <%= engine.name %>
+          <%= form_with url: round_two_participants_path, method: :post, local: false, class: "d-inline" do |form| %>
+            <%= form.hidden_field :engine_id, value: engine.id, name: "round_two_participant[engine_id]" %>
+            <%= form.hidden_field :tournament_id, value: tournament.id, name: "round_two_participant[tournament_id]" %>
+            <%= form.submit "Move", class: "btn btn-success btn-sm" %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
